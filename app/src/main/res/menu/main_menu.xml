@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:id="@+id/menu_main_group"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/menu_account"
+            android:icon="@drawable/ic_baseline_account_balance_24"
+            android:title="Accounts" />
+        <item
+            android:id="@+id/menu_bill"
+            android:icon="@drawable/ic_baseline_money_off_24"
+            android:title="Bills" />
+        <item
+            android:id="@+id/menu_budget"
+            android:icon="@drawable/ic_baseline_account_balance_wallet_24"
+            android:title="Budgets" />
+    </group>
+
+    <group android:id="@+id/menu_alt_group">
+
+        <item
+            android:id="@+id/menu_alert"
+            android:icon="@drawable/ic_baseline_notifications_24"
+            android:title="Alerts" />
+        <item
+            android:id="@+id/menu_logout"
+            android:icon="@drawable/ic_baseline_power_settings_new_24"
+            android:title="@string/log_out" />
+    </group>
+</menu>
