@@ -1,21 +1,37 @@
 package com.fazpass.finance.ui.login;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModel;
 import androidx.navigation.Navigation;
 
+import com.fazpass.finance.MainActivity;
 import com.fazpass.finance.R;
+import com.fazpass.finance.helper.Storage;
 import com.fazpass.finance.object.User;
+import com.fazpass.trusted_device.CROSS_DEVICE;
+import com.fazpass.trusted_device.Fazpass;
+import com.fazpass.trusted_device.FazpassTd;
+import com.fazpass.trusted_device.TRUSTED_DEVICE;
+import com.fazpass.trusted_device.TrustedDeviceListener;
 
 import java.util.ArrayList;
 
 public class LoginViewModel extends ViewModel {
 
     private LoginFragment fragment;
+    private AlertDialog dialog;
 
-    public void init(LoginFragment fragment) {
+    public void initialize(LoginFragment fragment) {
         this.fragment = fragment;
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(fragment.requireContext());
+        builder.setTitle("Logging in")
+                .setMessage("\nPlease wait while we try to log you in...\n")
+                .setCancelable(false);
+        dialog = builder.create();
     }
 
     public void login(String email, String phone, String pin) {
@@ -24,12 +40,37 @@ public class LoginViewModel extends ViewModel {
             return;
         }
 
+        dialog.show();
+
         User u = new User(email, phone, email.split("@")[0],"","", pin);
-        User.setUseFinger(false);
-        successLogin(u);
+        User.setIsUseFinger(false);
+        Fazpass.check(fragment.getContext(), email, phone, pin, new TrustedDeviceListener<FazpassTd>() {
+            @Override
+            public void onSuccess(FazpassTd o) {
+                dialog.dismiss();
+                if (o.td_status == TRUSTED_DEVICE.TRUSTED) {
+                    successLogin(u);
+                }
+                else {
+                    toConfirmOptions(u, o.cd_status);
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable err) {
+                dialog.dismiss();
+                failedLogin("Failed to initialize login. Check your internet and try again.");
+            }
+        });
     }
 
     private void successLogin(User u) {
+        Storage.saveUser(fragment.requireContext(), u);
+        fragment.startActivity(new Intent(fragment.requireContext(), MainActivity.class));
+        fragment.requireActivity().finish();
+    }
+
+    private void toConfirmOptions(User u, CROSS_DEVICE cd_status) {
         ArrayList<String> list = new ArrayList<>();
         list.add(u.getEmail());
         list.add(u.getPhone());
@@ -40,7 +81,7 @@ public class LoginViewModel extends ViewModel {
 
         Bundle args = new Bundle();
         args.putStringArrayList("ARGS_USER", list);
-        args.putBoolean("ARGS_CD_IS_AVAILABLE", true);
+        args.putBoolean("ARGS_CD_IS_AVAILABLE", cd_status.equals(CROSS_DEVICE.AVAILABLE));
         Navigation.findNavController(fragment.requireView())
                 .navigate(R.id.action_loginFragment_to_confirmLoginFragment, args);
     }

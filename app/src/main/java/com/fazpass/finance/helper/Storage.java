@@ -46,7 +46,7 @@ public class Storage {
             String pin = sharedPref.getString(key_user_pin, null);
 
             User user = new User(email, phone, name, idCard, address, pin);
-            User.setUseFinger(isUseFinger);
+            User.setIsUseFinger(isUseFinger);
             return user;
         }
 
