@@ -41,17 +41,14 @@ public class ConfidenceViewModel extends ViewModel {
         Fazpass.check(fragment.requireContext(), user.getEmail(), user.getPhone(), user.getPin(), new TrustedDeviceListener<FazpassTd>() {
             @Override
             public void onSuccess(FazpassTd o) {
-                Log.e("FAZPASS CHECK", "SUCCESS");
                 o.validateUser(fragment.requireContext(), user.getPin(), new TrustedDeviceListener<ValidateStatus>() {
                     @Override
                     public void onSuccess(ValidateStatus o) {
-                        Log.e("FAZPASS VALIDATE USER", "SUCCESS");
                         callback.apply(o.getConfidenceRate().getConfidence());
                     }
 
                     @Override
                     public void onFailure(Throwable err) {
-                        Log.e("FAZPASS VALIDATE USER", "FAILED");
                         err.printStackTrace();
                     }
                 });
@@ -59,7 +56,6 @@ public class ConfidenceViewModel extends ViewModel {
 
             @Override
             public void onFailure(Throwable err) {
-                Log.e("FAZPASS CHECK", "FAILED");
                 err.printStackTrace();
             }
         });

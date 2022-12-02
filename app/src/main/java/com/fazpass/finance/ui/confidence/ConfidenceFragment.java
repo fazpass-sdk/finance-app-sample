@@ -45,7 +45,7 @@ public class ConfidenceFragment extends Fragment {
         super.onStart();
         mViewModel.initialize(this);
         mViewModel.awaitConfidenceRate(aDouble -> {
-            confidenceTxt.setText(String.format("%s%%", aDouble));
+            confidenceTxt.setText(String.format("%s%%", aDouble*100));
             return null;
         });
     }
