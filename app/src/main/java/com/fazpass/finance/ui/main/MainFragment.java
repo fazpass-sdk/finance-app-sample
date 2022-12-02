@@ -27,6 +27,7 @@ import com.google.android.material.navigation.NavigationView;
 public class MainFragment extends Fragment {
 
     private MainViewModel mViewModel;
+    private DrawerLayout drawerLayout;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,7 +57,7 @@ public class MainFragment extends Fragment {
         n.setNavigationItemSelectedListener(this::onMenuItemClick);
 
         NavController navController = Navigation.findNavController(view);
-        DrawerLayout drawerLayout = view.getRootView().findViewById(R.id.container_main);
+        drawerLayout = view.getRootView().findViewById(R.id.container_main);
         AppBarConfiguration appBarConfiguration =
                 new AppBarConfiguration.Builder(navController.getGraph())
                         .setOpenableLayout(drawerLayout)
@@ -68,6 +69,11 @@ public class MainFragment extends Fragment {
     }
 
     private boolean onMenuItemClick(MenuItem item) {
+        if (item.getItemId() == R.id.menu_confidence) {
+            mViewModel.toConfidence();
+            drawerLayout.close();
+            return true;
+        }
         if (item.getItemId() == R.id.menu_logout) {
             mViewModel.logout();
             return true;

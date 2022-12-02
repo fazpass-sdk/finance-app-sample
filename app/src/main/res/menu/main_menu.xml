@@ -25,6 +25,10 @@
             android:icon="@drawable/ic_baseline_notifications_24"
             android:title="Alerts" />
         <item
+            android:id="@+id/menu_confidence"
+            android:icon="@drawable/ic_baseline_percent_48"
+            android:title="Confidence Rate" />
+        <item
             android:id="@+id/menu_logout"
             android:icon="@drawable/ic_baseline_power_settings_new_24"
             android:title="@string/log_out" />

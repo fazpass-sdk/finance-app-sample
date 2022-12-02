@@ -11,6 +11,8 @@
         <action
             android:id="@+id/action_splashFragment_to_loginFragment"
             app:destination="@id/loginFragment"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true"
             app:enterAnim="@anim/slide_in_bottom"
             app:exitAnim="@anim/slide_out_top" />
     </fragment>
@@ -28,10 +30,5 @@
         android:id="@+id/confirmLoginFragment"
         android:name="com.fazpass.finance.ui.confirm_login.ConfirmLoginFragment"
         android:label="fragment_confirm_login" >
-        <action
-            android:id="@+id/action_confirmLoginFragment_to_loginFragment"
-            app:destination="@id/loginFragment"
-            app:enterAnim="@anim/slide_in_left"
-            app:exitAnim="@anim/slide_out_right" />
     </fragment>
 </navigation>

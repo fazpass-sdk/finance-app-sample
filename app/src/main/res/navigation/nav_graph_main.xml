@@ -10,5 +10,20 @@
         android:name="com.fazpass.finance.ui.main.MainFragment"
         android:label="@string/app_name"
         tools:layout="@layout/fragment_main" >
+
+        <action
+            android:id="@+id/action_mainFragment_to_confidenceFragment"
+            app:destination="@id/confidenceFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/confidenceFragment"
+        android:name="com.fazpass.finance.ui.confidence.ConfidenceFragment"
+        android:label="confidence_fragment"
+        tools:layout="@layout/fragment_confidence" >
     </fragment>
 </navigation>
