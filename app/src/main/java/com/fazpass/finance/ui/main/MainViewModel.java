@@ -10,6 +10,7 @@ import com.fazpass.finance.R;
 import com.fazpass.finance.data.SampleData;
 import com.fazpass.finance.helper.Storage;
 import com.fazpass.finance.object.User;
+import com.fazpass.trusted_device.Fazpass;
 
 public class MainViewModel extends ViewModel {
     private MainFragment fragment;
@@ -42,6 +43,7 @@ public class MainViewModel extends ViewModel {
     }
 
     public void logout() {
+        Fazpass.removeDevice(fragment.requireActivity().getApplicationContext());
         Storage.logout(fragment.requireContext());
 
         Intent intent = new Intent(fragment.requireActivity(), LoginActivity.class);

@@ -45,8 +45,9 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="email@mail.com / 081234567890"
-            android:inputType="textEmailAddress|phone"
+            android:inputType="textEmailAddress"
             android:minHeight="48dp"
+            android:textColor="@color/white"
             android:textColorHint="#78909C" />
 
         <TextView
@@ -62,7 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
-            android:text="Password"
+            android:text="PIN"
             android:textColor="@color/default_text_color" />
 
         <EditText
@@ -71,7 +72,8 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPassword"
-            android:minHeight="48dp" />
+            android:minHeight="48dp"
+            android:textColor="@color/white" />
 
         <TextView
             android:id="@+id/error_txt"
@@ -86,7 +88,7 @@
             style="@style/ElevatedButton"
             android:layout_width="match_parent"
             android:layout_marginTop="30dp"
-            android:text="Login" />
+            android:text="@string/register" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
