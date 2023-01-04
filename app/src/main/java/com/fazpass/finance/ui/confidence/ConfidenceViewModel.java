@@ -1,28 +1,26 @@
 package com.fazpass.finance.ui.confidence;
 
-import android.util.Log;
+import android.content.Context;
 import android.view.View;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.navigation.Navigation;
 
-import com.fazpass.finance.helper.Storage;
-import com.fazpass.finance.object.User;
+import com.fazpass.finance.component.DialogInputNumber;
 import com.fazpass.trusted_device.Fazpass;
 import com.fazpass.trusted_device.FazpassTd;
 import com.fazpass.trusted_device.TrustedDeviceListener;
+import com.fazpass.trusted_device.User;
 import com.fazpass.trusted_device.ValidateStatus;
-
-import java.util.function.Function;
 
 public class ConfidenceViewModel extends ViewModel {
 
-    private ConfidenceFragment fragment;
     private User user;
-
-    public void initialize(ConfidenceFragment confidenceFragment) {
-        fragment = confidenceFragment;
-    }
+    private final MutableLiveData<String> confidenceRate = new MutableLiveData<>();
 
     public User getUser() {
         return user;
@@ -37,19 +35,42 @@ public class ConfidenceViewModel extends ViewModel {
                 .navigateUp();
     }
 
-    public void awaitConfidenceRate(Function<Double, Void> callback) {
-        Fazpass.check(fragment.requireContext(), user.getEmail(), user.getPhone(), user.getPin(), new TrustedDeviceListener<FazpassTd>() {
+    public MutableLiveData<String> getConfidenceRate() {
+        return confidenceRate;
+    }
+
+    public void requestConfidence(Fragment fragment) {
+        String title = "Input PIN";
+        String message = "Please input your pin to calculate confidence rate.";
+        AlertDialog inputPinDialog = new DialogInputNumber(
+                fragment, title, message, 4,
+                (alertDialog, input) -> {
+                    alertDialog.dismiss();
+                    calculateConfidenceRate(fragment.requireContext(), input);
+                    return null;
+                },
+                alertDialog -> {
+                    alertDialog.dismiss();
+                    onNavigateUp(fragment.requireView());
+                    return null;
+                }).getInstance();
+        inputPinDialog.show();
+    }
+
+    private void calculateConfidenceRate(Context context, String pin) {
+        Fazpass.check(context, user.getEmail(), user.getPhone(), new TrustedDeviceListener<FazpassTd>() {
             @Override
             public void onSuccess(FazpassTd o) {
-                o.validateUser(fragment.requireContext(), user.getPin(), new TrustedDeviceListener<ValidateStatus>() {
+                o.validateUser(context, pin, new TrustedDeviceListener<ValidateStatus>() {
                     @Override
                     public void onSuccess(ValidateStatus o) {
-                        callback.apply(o.getConfidenceRate().getConfidence());
+                        String val = String.format("%s%%", o.getConfidenceRate().getSummary()*100);
+                        confidenceRate.postValue(val);
                     }
 
                     @Override
                     public void onFailure(Throwable err) {
-                        err.printStackTrace();
+                        Toast.makeText(context, err.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
             }

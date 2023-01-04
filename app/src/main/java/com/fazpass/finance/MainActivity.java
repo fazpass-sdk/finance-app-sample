@@ -11,7 +11,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.NavigationUI;
 
 import com.fazpass.finance.helper.Storage;
-import com.fazpass.finance.object.User;
+import com.fazpass.trusted_device.User;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {

@@ -9,7 +9,7 @@ import androidx.navigation.Navigation;
 import com.fazpass.finance.MainActivity;
 import com.fazpass.finance.R;
 import com.fazpass.finance.helper.Storage;
-import com.fazpass.finance.object.User;
+import com.fazpass.trusted_device.User;
 
 public class SplashViewModel extends ViewModel {
 

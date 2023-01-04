@@ -6,10 +6,12 @@
     <string name="otp_sms_gateway_key" translatable="false">1e1de010-71b2-47d6-a037-254182ff3696</string>
     <string name="otp_miscall_gateway_key" translatable="false">595ea55e-95d2-4ec4-969e-910de41585a0</string>
     <string name="otp_email_gateway_key" translatable="false">26cb8e5f-5332-46ba-a43e-ed2fc5a51d7c</string>
+    <string name="otp_wa_gateway_key" translatable="false">c73fbaac-cce8-4cad-af0e-afd040a8f7e2</string>
+    <string name="otp_wa_long_gateway_key" translatable="false">0e3c30a6-02f3-4fd8-9155-1924e9480726</string>
+    <string name="otp_he_gateway_key" translatable="false">6cb0b024-9721-4243-9010-fd9e386157ec</string>
     <string name="person_email_default">johndoe111@gmail.com</string>
     <string name="person_phone_default">012345678910</string>
-    <string name="log_in">Log In</string>
-    <string name="register">Register</string>
+    <string name="login">Login / Register</string>
     <string name="my_profile">My Profile</string>
     <string name="log_out">Log Out</string>
     <string name="short_lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</string>
@@ -19,10 +21,14 @@
     <string name="greeting_message">Welcome, <b>%1$s</b>!</string>
     <string name="cd_notification_message">\nWe just sent a notification to the device that has been logged in to your account. Please confirm it to continue.\n</string>
     <string name="sms_verification_message">\nWe just sent a message to your phone number. Put in the otp code from the message.\n</string>
-    <string name="phone_verification_message">\nWe just called your phone number. Put in the otp code from the call.\n</string>
+    <string name="phone_verification_message">\nWe just called your phone number. Enter the last %1$d digits of the caller\'s number.\n</string>
     <string name="email_verification_message">\nWe just sent an email to your email address. Put in the otp code from the email.\n</string>
-    <string name="confirming_message">\nPlease wait while we check your otp…\n</string>
+    <string name="wa_verification_message">\nWe just sent a message to your WhatsApp number. Put in the otp code from the message.\n</string>
+    <string name="he_verification_message">\nPlease wait while we do header enrichment verification…\n</string>
+    <string name="otp_not_ready_message">OTP is not ready yet.</string>
+    <string name="otp_confirming_message">\nPlease wait while we check your otp…\n</string>
     <string name="error_message_sample">Session has expired. Please login again to renew your session.</string>
     <string name="fazpass_init_failed_message">Failed to initialize %1$s. Check your internet and try again.</string>
-    <string name="login_info">*currently, phone number only works in indonesia</string>
+    <string name="login_info">*currently, phone number only works in Indonesia</string>
+    <string name="login_finish">Please wait, preparing to homepage…</string>
 </resources>

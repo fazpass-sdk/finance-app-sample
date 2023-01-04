@@ -22,15 +22,6 @@ public class DialogInputNumber {
 
     public DialogInputNumber(Fragment fragment,
                              String title,
-                             int message,
-                             int requiredLength,
-                             Function2<AlertDialog, String, Void> onOKListener,
-                             Function<AlertDialog, Void> onCancelListener) {
-        this(fragment, title, fragment.getString(message), requiredLength, onOKListener, onCancelListener);
-    }
-
-    public DialogInputNumber(Fragment fragment,
-                             String title,
                              String message,
                              int requiredLength,
                              Function2<AlertDialog, String, Void> onOKListener,
@@ -42,16 +33,10 @@ public class DialogInputNumber {
         Button cancelBtn = dialogView.findViewById(R.id.dialog_input_number_cancel_btn);
 
         okBtn.setEnabled(false);
-        input.addTextChangedListener(new TextWatcher() {
-
+        input.addTextChangedListener(new CTextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.length() >= requiredLength) {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() >= requiredLength) {
                     if (!isEnabled) {
                         isEnabled = true;
                         okBtn.setEnabled(true);
@@ -63,17 +48,13 @@ public class DialogInputNumber {
                     }
                 }
             }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
         });
 
         AlertDialog dialog = new AlertDialog.Builder(fragment.requireContext())
                 .setTitle(title)
                 .setMessage(message)
                 .setView(dialogView)
+                .setCancelable(false)
                 .create();
 
         okBtn.setOnClickListener(view -> onOKListener.invoke(dialog, input.getText().toString()));
@@ -84,5 +65,16 @@ public class DialogInputNumber {
 
     public AlertDialog getInstance() {
         return instance;
+    }
+
+    private static abstract class CTextWatcher implements TextWatcher {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+        @Override
+        abstract public void onTextChanged(CharSequence s, int start, int before, int count);
+
+        @Override
+        public void afterTextChanged(Editable s) {}
     }
 }

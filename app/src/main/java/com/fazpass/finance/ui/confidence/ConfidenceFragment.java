@@ -24,6 +24,7 @@ public class ConfidenceFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mViewModel = new ViewModelProvider(this).get(ConfidenceViewModel.class);
         mViewModel.setUser(Storage.getUser(requireContext()));
+        mViewModel.getConfidenceRate().observe(this, s -> confidenceTxt.setText(s));
     }
 
     @Override
@@ -43,10 +44,7 @@ public class ConfidenceFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        mViewModel.initialize(this);
-        mViewModel.awaitConfidenceRate(aDouble -> {
-            confidenceTxt.setText(String.format("%s%%", aDouble*100));
-            return null;
-        });
+
+        mViewModel.requestConfidence(this);
     }
 }

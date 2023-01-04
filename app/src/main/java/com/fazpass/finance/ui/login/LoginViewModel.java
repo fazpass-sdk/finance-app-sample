@@ -2,6 +2,7 @@ package com.fazpass.finance.ui.login;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.lifecycle.ViewModel;
@@ -9,14 +10,16 @@ import androidx.navigation.Navigation;
 
 import com.fazpass.finance.MainActivity;
 import com.fazpass.finance.R;
+import com.fazpass.finance.component.DialogInputNumber;
 import com.fazpass.finance.helper.LOGIN_TYPE;
 import com.fazpass.finance.helper.Storage;
-import com.fazpass.finance.object.User;
 import com.fazpass.trusted_device.CROSS_DEVICE;
+import com.fazpass.trusted_device.EnrollStatus;
 import com.fazpass.trusted_device.Fazpass;
 import com.fazpass.trusted_device.FazpassTd;
 import com.fazpass.trusted_device.TRUSTED_DEVICE;
 import com.fazpass.trusted_device.TrustedDeviceListener;
+import com.fazpass.trusted_device.User;
 
 import java.util.ArrayList;
 
@@ -36,18 +39,18 @@ public class LoginViewModel extends ViewModel {
         dialog = builder.create();
     }
 
-    public void login(String login, String pin) {
-        if (login.isEmpty() || pin.isEmpty()) {
-            failedLogin("Please fill in all of this form.");
+    public void login(String input) {
+        if (input.isEmpty()) {
+            failedLogin("Please input your phone / email.");
             return;
         }
 
         loginType = null;
         try {
-            Double.parseDouble(login);
+            Double.parseDouble(input);
             loginType = LOGIN_TYPE.phone;
         } catch (NumberFormatException ignored) {}
-        if (loginType==null && login.contains("@")) {
+        if (loginType==null && input.contains("@")) {
             loginType = LOGIN_TYPE.email;
         }
         if (loginType==null) {
@@ -57,20 +60,20 @@ public class LoginViewModel extends ViewModel {
 
         User u;
         if (loginType==LOGIN_TYPE.email) {
-            u = new User(login, "-", login.split("@")[0],"","", pin);
+            u = new User(input, "", input.split("@")[0],"","");
         }
         else {
-            u = new User("none@mail.com", login, "","","", pin);
+            u = new User("", input, "","","");
         }
         User.setIsUseFinger(false);
 
         dialog.show();
-        Fazpass.check(fragment.getContext(), u.getEmail(), u.getPhone(), pin, new TrustedDeviceListener<FazpassTd>() {
+        Fazpass.check(fragment.getContext(), u.getEmail(), u.getPhone(), new TrustedDeviceListener<FazpassTd>() {
             @Override
             public void onSuccess(FazpassTd o) {
                 dialog.dismiss();
                 if (o.td_status == TRUSTED_DEVICE.TRUSTED) {
-                    successLogin(u);
+                    requestEnroll(u, o);
                 }
                 else {
                     toConfirmOptions(u, o.cd_status);
@@ -81,6 +84,52 @@ public class LoginViewModel extends ViewModel {
             public void onFailure(Throwable err) {
                 dialog.dismiss();
                 failedLogin("Failed to initialize login. Check your internet and try again.");
+            }
+        });
+    }
+
+    private void requestEnroll(User u, FazpassTd o) {
+        String title = "Input PIN";
+        String message = "Input new PIN for your application. (at least 4 digits)";
+        AlertDialog inputPinDialog = new DialogInputNumber(
+                fragment, title, message, 4,
+                (alertDialog, input) -> {
+                    alertDialog.dismiss();
+                    enroll(u, o, input);
+                    return null;
+                },
+                alertDialog -> {
+                    alertDialog.dismiss();
+                    return null;
+                }).getInstance();
+        inputPinDialog.show();
+    }
+
+    private void enroll(User u, FazpassTd o, String pin) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(fragment.requireContext());
+        builder.setTitle("Finishing Login")
+                .setMessage(fragment.getString(R.string.login_finish))
+                .setCancelable(false);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        o.enrollDeviceByPin(fragment.requireContext(), u, pin, new TrustedDeviceListener<EnrollStatus>() {
+            @Override
+            public void onSuccess(EnrollStatus o) {
+                dialog.dismiss();
+
+                if (o.getStatus()) {
+                    successLogin(u);
+                } else {
+                    fragment.showErrorMessage(o.getMessage());
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable err) {
+                dialog.dismiss();
+                Toast.makeText(fragment.requireContext(), "Failed to enroll. Check your internet and try again.", Toast.LENGTH_SHORT).show();
+                requestEnroll(u, o);
             }
         });
     }
@@ -98,7 +147,6 @@ public class LoginViewModel extends ViewModel {
         list.add(u.getName());
         list.add(u.getIdCard());
         list.add(u.getAddress());
-        list.add(u.getPin());
 
         Bundle args = new Bundle();
         args.putStringArrayList("ARGS_USER", list);

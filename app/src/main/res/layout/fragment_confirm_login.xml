@@ -18,28 +18,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
+        <TextView
             android:id="@+id/back_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="start"
-            android:gravity="center"
-            android:padding="4dp">
-
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="start"
-                app:srcCompat="@drawable/ic_baseline_arrow_back_24" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:text="Back"
-                android:textColor="@color/default_text_color"
-                android:textSize="18sp" />
-        </LinearLayout>
+            android:padding="4dp"
+            android:text="Back"
+            android:textColor="@color/default_text_color"
+            android:textSize="18sp"
+            app:drawableLeftCompat="@drawable/ic_baseline_arrow_back_24"
+            android:drawablePadding="4dp"/>
 
         <TextView
             android:id="@+id/title_txt3"
@@ -74,7 +63,15 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:text="Cross Device Notification" />
+            android:text="Verify by Device" />
+
+        <Button
+            android:id="@+id/he_ver_btn"
+            style="@style/ElevatedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="Verify by Header Enrichment" />
 
         <Button
             android:id="@+id/sms_ver_btn"
@@ -93,10 +90,27 @@
             android:text="Miscall Verification Code" />
 
         <Button
+            android:id="@+id/wa_ver_btn"
+            style="@style/ElevatedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="WhatsApp Verification Code" />
+
+        <Button
+            android:id="@+id/wa_long_ver_btn"
+            style="@style/ElevatedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:text="WhatsApp Long Verification Code" />
+
+        <Button
             android:id="@+id/email_ver_btn"
             style="@style/ElevatedButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:text="Email Verification Code" />
 
         <TextView

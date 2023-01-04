@@ -75,7 +75,7 @@ public class MainFragment extends Fragment {
             return true;
         }
         if (item.getItemId() == R.id.menu_logout) {
-            mViewModel.logout();
+            mViewModel.askLogout();
             return true;
         }
         return false;

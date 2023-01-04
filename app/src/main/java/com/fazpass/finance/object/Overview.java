@@ -1,9 +1,5 @@
 package com.fazpass.finance.object;
 
-import android.graphics.drawable.Drawable;
-
-import androidx.annotation.Nullable;
-
 import java.util.List;
 
 public class Overview {
